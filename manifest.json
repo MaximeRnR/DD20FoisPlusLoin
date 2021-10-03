@@ -1,0 +1,23 @@
+{
+  "name": "DD20FoisPlusLoin",
+  "description": "Lie votre roll20 à votre ",
+  "version": "1.0",
+  "manifest_version": 3,
+  "action": {
+    "default_title": "Cliquez pour initaliasier le lien entre ddplusloin et roll20 ! "
+  },
+  "permissions": [
+    "scripting",
+    "tabs"
+  ],
+  "background": {
+    "service_worker": "background.js"
+  },
+  "icons": {
+    "128": "/images/ddpl20.png"
+  },
+  "host_permissions": [
+    "https://ddplusloin.herokuapp.com/",
+    "https://app.roll20.net/editor/"
+  ]
+}
