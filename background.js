@@ -1,7 +1,7 @@
 function initBlocks() {
    const charName = document.querySelector(".name").innerText;
    const ability = document.querySelectorAll('.ability');
-   const savingThrow = document.querySelectorAll('.saving-throw');
+   const savingThrow = document.querySelectorAll('.saving-throw .saving-throw');
    const attackCell = document.querySelectorAll('.hit-cell');
 
    const initiative = document.querySelector('.initiative');
