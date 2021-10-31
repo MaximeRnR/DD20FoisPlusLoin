@@ -31,6 +31,34 @@ function initListeners() {
          chrome.runtime.sendMessage({label: `Attaque : ${label}`, modifier: modifier, charName: charName, damage: damage});
       })
    });
+
+   const optionsDialog = document.createElement("div");
+   optionsDialog.style.width = "8%";
+   optionsDialog.style.height = "150px";
+   optionsDialog.style.background = "white";
+   optionsDialog.style.display =  "flex";
+   optionsDialog.style.justifyContent =  "center";
+   optionsDialog.style.alignItems =  "center";
+   optionsDialog.style.position = "fixed";
+   optionsDialog.style.top = "75px";
+   optionsDialog.style.left = "12px";
+
+   const headerElement = document.createElement("div");
+   headerElement.classList.add("color-header");
+   headerElement.style.position = "absolute";
+   headerElement.style.top = "0";
+   headerElement.style.background = "#3b64de";
+   headerElement.style.height = "8px";
+   headerElement.style.width = "100%";
+   optionsDialog.append(headerElement);
+
+   const avantageElement = document.createElement("button");
+   avantageElement.classList.add("button");
+   avantageElement.innerHTML = "AVANTAGE";
+   avantageElement.style.width = "fit-content";
+   optionsDialog.append(avantageElement);
+   document.body.append(optionsDialog);
+   console.log("Lien Roll20 & DDPLUSLOIN initialisé.");
 }
 
 function roll(request) {
@@ -41,7 +69,6 @@ function roll(request) {
       roll20ChatInput.value = `&{template:default} {{name=${request.charName} - ${request.label}}} {{modificateur=${request.modifier}}} {{${request.label} = [[1D20 ${request.modifier}]]}}`
    }
    roll20ChatInput.dispatchEvent(new KeyboardEvent('keydown', {bubbles: true, cancelable: true, keyCode: 13}));
-   console.log("Lien Roll20 & DDPLUSLOIN initialisé.")
 }
 
 
