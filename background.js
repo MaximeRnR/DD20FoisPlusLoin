@@ -1,4 +1,4 @@
-function initBlocks() {
+function initListeners() {
    const charName = document.querySelector(".name").innerText;
    const ability = document.querySelectorAll('.ability');
    const savingThrow = document.querySelectorAll('.saving-throw .saving-throw');
@@ -33,14 +33,6 @@ function initBlocks() {
    });
 }
 
-
-chrome.action.onClicked.addListener((tab) => {
-   chrome.scripting.executeScript({
-      target: {tabId: tab.id},
-      function: initBlocks
-   });
-});
-
 function roll(request) {
    let roll20ChatInput = document.querySelector('#textchat-input > textarea');
    if(request.damage){
@@ -48,21 +40,34 @@ function roll(request) {
    } else {
       roll20ChatInput.value = `&{template:default} {{name=${request.charName} - ${request.label}}} {{modificateur=${request.modifier}}} {{${request.label} = [[1D20 ${request.modifier}]]}}`
    }
-   roll20ChatInput.dispatchEvent(new KeyboardEvent('keydown', {bubbles: true, cancelable: true, keyCode: 13}))
+   roll20ChatInput.dispatchEvent(new KeyboardEvent('keydown', {bubbles: true, cancelable: true, keyCode: 13}));
+   console.log("Lien Roll20 & DDPLUSLOIN initialisé.")
 }
 
 
 chrome.runtime.onMessage.addListener(
    function (request, sender, sendResponse) {
-      chrome.tabs.query({url: "*://app.roll20.net/*"}, function (tabs) {
-         for (const tab of tabs) {
-            chrome.scripting.executeScript({
-               target: {tabId: tab.id},
-               function: roll,
-               args: [request]
-            });
-         }
-      });
+      console.log(request);
+      if (request.msg === "initListeners") {
+         chrome.tabs.query({url: "*://ddplusloin.herokuapp.com/*"}, function (tabs) {
+            for (const tab of tabs) {
+               chrome.scripting.executeScript({
+                  target: {tabId: tab.id},
+                  function: initListeners,
+               });
+            }
+         });
+      } else {
+         chrome.tabs.query({url: "*://app.roll20.net/*"}, function (tabs) {
+            for (const tab of tabs) {
+               chrome.scripting.executeScript({
+                  target: {tabId: tab.id},
+                  function: roll,
+                  args: [request]
+               });
+            }
+         });
+      }
    }
 );
 

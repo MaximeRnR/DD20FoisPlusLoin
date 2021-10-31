@@ -1,0 +1,43 @@
+body {
+   border: 1px solid blue;
+   margin: 0;
+   width: 350px;
+}
+
+.color-header{
+   position: absolute;
+   top:0;
+   background: #3b64de;
+   height: 8px;
+   width: 100%;
+}
+
+.title {
+   font-weight: bold;
+}
+
+.content {
+   padding: 20px;
+   display: flex;
+   flex-direction: column;
+   justify-content: flex-start;
+   align-items: flex-start;
+}
+
+.content ol {
+   font-size: 16px;
+}
+
+.button {
+   background: white;
+   border: 2px solid #3b64de;
+   border-radius: 10px;
+   color: black;
+   font-size: 20px;
+   box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
+   transition: box-shadow 100ms ease-in;
+}
+
+.button:active {
+   box-shadow: 0 0 0;
+}

@@ -4,7 +4,8 @@
   "version": "1.1",
   "manifest_version": 3,
   "action": {
-    "default_title": "Cliquez pour initaliasier le lien entre ddplusloin et roll20 ! "
+    "default_title": "",
+    "default_popup": "popup.html"
   },
   "permissions": [
     "scripting",
