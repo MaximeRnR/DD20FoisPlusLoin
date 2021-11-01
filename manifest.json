@@ -1,7 +1,7 @@
 {
   "name": "DD20FoisPlusLoin",
-  "description": "Lie votre roll20 à votre ",
-  "version": "1.1",
+  "description": "Lie votre roll20 à votre DDPL ",
+  "version": "1.2",
   "manifest_version": 3,
   "action": {
     "default_title": "",
@@ -20,5 +20,8 @@
   "host_permissions": [
     "https://ddplusloin.herokuapp.com/",
     "https://app.roll20.net/editor/"
-  ]
+  ],
+  "externally_connectable": {
+    "matches": ["*://localhost/*", "*://ddplusloin.herokuapp.com/*"]
+  }
 }

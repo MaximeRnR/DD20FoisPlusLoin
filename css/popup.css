@@ -34,10 +34,22 @@ body {
    border-radius: 10px;
    color: black;
    font-size: 20px;
+   cursor: pointer;
    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
    transition: box-shadow 100ms ease-in;
 }
 
 .button:active {
    box-shadow: 0 0 0;
+}
+
+.button:disabled {
+   background: lightgreen;
+   border: 2px solid green;
+   border-radius: 10px;
+   color: white;
+   font-size: 20px;
+   box-shadow: 0 0 0;
+   cursor: not-allowed;
+   transition: box-shadow 100ms ease-in;
 }
