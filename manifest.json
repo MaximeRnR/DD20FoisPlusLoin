@@ -1,7 +1,7 @@
 {
   "name": "DD20FoisPlusLoin",
   "description": "Lie votre roll20 à votre DDPL ",
-  "version": "1.2",
+  "version": "1.2.1",
   "manifest_version": 3,
   "action": {
     "default_title": "",

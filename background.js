@@ -180,6 +180,7 @@ chrome.runtime.onMessage.addListener(
    function (request, sender, sendResponse) {
       if (request.msg === "areListenersInitialized") {
          sendResponse({listenersInitialized: areListenersInitialized()});
+         return;
       }
       if (request.msg === "initListeners") {
          listenersInitialized = true;
@@ -192,17 +193,17 @@ chrome.runtime.onMessage.addListener(
             }
          });
          sendResponse({listenersInitialized: areListenersInitialized()});
-      } else {
-         chrome.tabs.query({url: "*://app.roll20.net/*"}, function (tabs) {
-            for (const tab of tabs) {
-               chrome.scripting.executeScript({
-                  target: {tabId: tab.id},
-                  function: roll,
-                  args: [request]
-               });
-            }
-         });
+         return;
       }
+      chrome.tabs.query({url: "*://app.roll20.net/*"}, function (tabs) {
+         for (const tab of tabs) {
+            chrome.scripting.executeScript({
+               target: {tabId: tab.id},
+               function: roll,
+               args: [request]
+            });
+         }
+      });
    }
 );
 
