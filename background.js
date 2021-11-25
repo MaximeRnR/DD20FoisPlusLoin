@@ -138,6 +138,10 @@ function initListeners() {
       optionsDialog.append(buttonContainer);
       document.body.append(optionsDialog);
       console.log("Lien Roll20 & DDPLUSLOIN initialisé.");
+      setInterval(() => {
+         console.log("Keeping link between Roll20 and DDPL alive !");
+         chrome.runtime.sendMessage({msg: "keep-alive"})
+      }, 30000)
    }
 }
 
@@ -193,6 +197,10 @@ chrome.runtime.onMessage.addListener(
             }
          });
          sendResponse({listenersInitialized: areListenersInitialized()});
+         return;
+      }
+      if(request.msg === "keep-alive"){
+         setTimeout(() => console.log("stayin' alive"), 30000);
          return;
       }
       chrome.tabs.query({url: "*://app.roll20.net/*"}, function (tabs) {
