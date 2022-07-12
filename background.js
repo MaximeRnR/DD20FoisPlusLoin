@@ -50,7 +50,7 @@ function initListeners() {
             const roll20Damage = damage.split('(').join('[').split(')').join(']');
             let foundryDamage = damage.split(/ *\([^)]*\) */g);
             foundryDamage.splice(foundryDamage.length - 1, 1);
-            foundryDamage.join(" + ");
+            foundryDamage = foundryDamage.join(" + ");
             const modifier = element.innerText;
             chrome.runtime.sendMessage({
                label: `Attaque : ${label}`,
