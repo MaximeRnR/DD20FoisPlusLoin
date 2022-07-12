@@ -47,13 +47,16 @@ function initListeners() {
          element.addEventListener('click', () => {
             const label = element.parentElement.querySelectorAll('td')[0].innerText;
             let damage = element.parentElement.querySelectorAll('td')[3].innerText;
-            damage = damage.split('(').join('[').split(')').join(']');
+            const roll20Damage = damage.split('(').join('[').split(')').join(']');
+            let foundryDamage = damage.split(/ *\([^)]*\) */g);
+            foundryDamage.splice(foundryDamage.length - 1, 1);
+            foundryDamage.join(" + ");
             const modifier = element.innerText;
             chrome.runtime.sendMessage({
                label: `Attaque : ${label}`,
                modifier: modifier,
                charName: charName,
-               damage: damage,
+               damage: {roll20: roll20Damage, foundry: foundryDamage},
                advantage: getAdvantage()
             });
          })
@@ -148,11 +151,20 @@ function initListeners() {
 function roll(request) {
    let roll20ChatInput = document.querySelector('#textchat-input > textarea');
    if (request.damage) {
-      roll20ChatInput.value = `&{template:default} {{name=${request.charName} - ${request.label}}} {{modificateur=${request.modifier}}} {{${request.label} = [[1D20 ${request.modifier}]] ${request.advantage ? `| [[1D20 ${request.modifier}]]` : ''}}} {{degats= [[${request.damage}]]}}`
+      roll20ChatInput.value = `&{template:default} {{name=${request.charName} - ${request.label}}} {{modificateur=${request.modifier}}} {{${request.label} = [[1D20 ${request.modifier}]] ${request.advantage ? `| [[1D20 ${request.modifier}]]` : ''}}} {{degats= [[${request.damage.roll20}]]}}`
    } else {
       roll20ChatInput.value = `&{template:default} {{name=${request.charName} - ${request.label}}} {{modificateur=${request.modifier}}} {{${request.label} = [[1D20 ${request.modifier}]] ${request.advantage ? `| [[1D20 ${request.modifier}]]` : ''}}}`
    }
    roll20ChatInput.dispatchEvent(new KeyboardEvent('keydown', {bubbles: true, cancelable: true, keyCode: 13}));
+}
+
+function rollFoundry(request) {
+   let diceToRolls = request.advantage ? '2D20kh' : '1D20';
+   let roll20ChatInput = document.querySelector('.window-content #chat-form #chat-message') ?? document.querySelector('#sidebar #chat-form #chat-message');
+   roll20ChatInput.value = `${request.label}: [[${diceToRolls}${request.modifier}]]
+   ${request.damage ? `Dégats : [[/r ${request.damage.foundry}]]` : ""}`;
+   let rollChatButton = document.querySelector('.window-content #chat > section > div.dice-tray__math.flexrow > button.dice-tray__roll') ?? document.querySelector('#sidebar #chat > section > div.dice-tray__math.flexrow > button.dice-tray__roll');
+   rollChatButton.dispatchEvent(new Event('click'));
 }
 
 function removePopup(){
@@ -201,6 +213,7 @@ chrome.runtime.onMessage.addListener(
       }
       if(request.msg === "keep-alive"){
          setTimeout(() => console.log("stayin' alive"), 30000);
+         sendResponse({ok: "ok"});
          return;
       }
       chrome.tabs.query({url: "*://app.roll20.net/*"}, function (tabs) {
@@ -208,6 +221,15 @@ chrome.runtime.onMessage.addListener(
             chrome.scripting.executeScript({
                target: {tabId: tab.id},
                function: roll,
+               args: [request]
+            });
+         }
+      });
+      chrome.tabs.query({url: "*://*/*"}, function (tabs) {
+         for (const tab of tabs) {
+            chrome.scripting.executeScript({
+               target: {tabId: tab.id},
+               function: rollFoundry,
                args: [request]
             });
          }
