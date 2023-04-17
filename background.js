@@ -188,6 +188,14 @@ function handleUpdated(tabId, changeInfo, tabInfo) {
             });
          }
       });
+      chrome.tabs.query({url: "*://ddplusloin.onrender.com/*"}, function (tabs) {
+         for (const tab of tabs) {
+            chrome.scripting.executeScript({
+               target: {tabId: tab.id},
+               function: removePopup
+            });
+         }
+      });
    }
 }
 
@@ -201,6 +209,14 @@ chrome.runtime.onMessage.addListener(
       if (request.msg === "initListeners") {
          listenersInitialized = true;
          chrome.tabs.query({url: "*://ddplusloin.herokuapp.com/*"}, function (tabs) {
+            for (const tab of tabs) {
+               chrome.scripting.executeScript({
+                  target: {tabId: tab.id},
+                  function: initListeners,
+               });
+            }
+         });
+         chrome.tabs.query({url: "*://ddplusloin.onrender.com/*"}, function (tabs) {
             for (const tab of tabs) {
                chrome.scripting.executeScript({
                   target: {tabId: tab.id},
